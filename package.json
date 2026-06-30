@@ -1,0 +1,17 @@
+{
+  "name": "vpnchecker",
+  "version": "1.0.0",
+  "description": "Браузерная проверка, включён ли VPN, по доступности заблокированных в РФ ресурсов",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "typescript": "^6.0.3",
+    "vite": "^6.0.0"
+  },
+  "packageManager": "pnpm@11.7.0"
+}
