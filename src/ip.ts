@@ -2,11 +2,17 @@ import type { IpInfo } from "./types.js";
 
 const TIMEOUT_MS = 3000;
 
+// Мобильные браузеры игнорируют cache: "no-store" для GET и отдают ответ из дискового
+// кэша — из-за этого при смене VPN показывалась старая страна. Ломаем URL параметром.
+function withoutCache(url: string): string {
+  return url + (url.includes("?") ? "&" : "?") + "_=" + Date.now();
+}
+
 async function fetchJson(url: string): Promise<unknown> {
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), TIMEOUT_MS);
   try {
-    const res = await fetch(url, { cache: "no-store", signal: ctrl.signal });
+    const res = await fetch(withoutCache(url), { cache: "no-store", signal: ctrl.signal });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     return await res.json();
   } catch (error) {
