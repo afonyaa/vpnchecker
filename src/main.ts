@@ -8,6 +8,11 @@ const initialChecks: Check[] = BLOCKED.map(
   (target): Check => ({ ...target, status: "pending" })
 );
 
+// Метка сборки в подвале — видно, свежий ли на устройстве бандл или отдаётся кэш.
+declare const __BUILD_ID__: string;
+const buildEl = document.getElementById("build");
+if (buildEl) buildEl.textContent = `build ${__BUILD_ID__}`;
+
 const store = createStore<AppState>({ checks: initialChecks, ip: { status: "loading" } });
 store.subscribe(render);
 render(store.get());
