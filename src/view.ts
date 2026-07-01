@@ -38,8 +38,11 @@ function renderIp(ip: IpState): void {
     return;
   }
   if (ip.status === "error") {
-    ipEl.className = "ip";
-    ipEl.innerHTML = `<span class="ip-label">IP</span><span class="ip-value">не определён</span>`;
+    ipEl.className = "ip bad";
+    ipEl.innerHTML = `
+      <span class="ip-label">IP</span>
+      <span class="ip-value">не определён</span>
+      <span class="ip-error">${ip.message}</span>`;
     return;
   }
 
@@ -47,10 +50,14 @@ function renderIp(ip: IpState): void {
   const isRu = countryCode === "RU";
   ipEl.className = "ip " + (countryCode ? (isRu ? "bad" : "ok") : "");
   const place = countryCode ?? "—";
+  const warnings = ip.warnings.length
+    ? `<span class="ip-warn">не ответили: ${ip.warnings.join("; ")}</span>`
+    : "";
   ipEl.innerHTML = `
     <span class="ip-label">IP</span>
     <span class="ip-value">${addr}</span>
-    <span class="ip-country">${place}</span>`;
+    <span class="ip-country">${place}</span>
+    ${warnings}`;
 }
 
 export function render(state: AppState): void {

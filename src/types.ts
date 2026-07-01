@@ -22,8 +22,8 @@ export interface IpInfo {
 
 export type IpState =
   | { status: "loading" }
-  | { status: "error" }
-  | { status: "ok"; info: IpInfo };
+  | { status: "error"; message: string }
+  | { status: "ok"; info: IpInfo; warnings: string[] };
 
 export interface AppState {
   checks: Check[];

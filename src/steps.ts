@@ -11,15 +11,16 @@ export class IpStep extends PipelineStep {
 
   protected async execute(): Promise<boolean> {
     try {
-      const info = await lookupIp();
-      this.store.set({ ip: { status: "ok", info } });
+      const { info, warnings } = await lookupIp();
+      this.store.set({ ip: { status: "ok", info, warnings } });
       return true;
-    } catch {
-      // IP не определён: помечаем проверки как пропущенные, чтобы список не висел
-      // на «проверяю…», и обрываем цепочку.
+    } catch (error) {
+      // IP не определён: показываем причину, помечаем проверки как пропущенные,
+      // чтобы список не висел на «проверяю…», и обрываем цепочку.
+      const message = error instanceof Error ? error.message : "все провайдеры недоступны";
       this.store.set((state) => ({
         ...state,
-        ip: { status: "error" },
+        ip: { status: "error", message },
         checks: state.checks.map((c) => ({ ...c, status: "skipped" as const })),
       }));
       return false;

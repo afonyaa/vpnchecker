@@ -46,6 +46,7 @@
     .ip {
       margin-top: 16px;
       display: flex;
+      flex-wrap: wrap;
       align-items: center;
       gap: 10px;
       background: var(--card);
@@ -69,6 +70,20 @@
 
     .ip-country {
       font-size: 13px;
+    }
+
+    .ip-error {
+      color: var(--bad);
+      font-size: 12px;
+      flex-basis: 100%;
+      line-height: 1.4;
+    }
+
+    .ip-warn {
+      color: var(--bad);
+      font-size: 11px;
+      flex-basis: 100%;
+      line-height: 1.4;
     }
 
     .ip.ok {
