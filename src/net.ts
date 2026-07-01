@@ -1,5 +1,14 @@
 
-const TIMEOUT_MS = 6000;
+const DEFAULT_TIMEOUT_MS = 5000;
+
+// Таймаут запроса к ресурсу. Переопределяется через ?timeoutMS в адресной строке;
+// некорректное/неположительное значение игнорируем и берём дефолт.
+function timeoutMs(): number {
+  const raw = new URLSearchParams(window.location.search).get("timeoutMS");
+  if (raw === null) return DEFAULT_TIMEOUT_MS;
+  const value = Number(raw);
+  return Number.isFinite(value) && value > 0 ? value : DEFAULT_TIMEOUT_MS;
+}
 
 function withoutCache(url: string): string {
   return url + (url.includes("?") ? "&" : "?") + "_=" + Date.now();
@@ -7,7 +16,7 @@ function withoutCache(url: string): string {
 
 export async function reachable(url: string): Promise<boolean> {
   const ctrl = new AbortController();
-  const timer = setTimeout(() => ctrl.abort(), TIMEOUT_MS);
+  const timer = setTimeout(() => ctrl.abort(), timeoutMs());
   try {
     await fetch(withoutCache(url), {
       mode: "no-cors",
